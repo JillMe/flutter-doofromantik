@@ -1,47 +1,10 @@
 import 'package:hexagon/model/pointy_hexagon.dart';
 import 'package:hexagon/util/seed.dart';
 
+import 'field_type.dart';
 import 'hex_grid.dart';
 
 typedef Direction = PointyHexagonalDirection;
-
-enum FieldType {
-  village,
-  forest,
-  plain,
-  grass,
-  river,
-  train;
-}
-
-const fieldTypeCompatibilites = <FieldType, List<FieldType>>{
-  FieldType.village: [
-    FieldType.village,
-    FieldType.forest,
-    FieldType.plain,
-    FieldType.grass
-  ],
-  FieldType.forest: [
-    FieldType.village,
-    FieldType.forest,
-    FieldType.plain,
-    FieldType.grass
-  ],
-  FieldType.plain: [
-    FieldType.village,
-    FieldType.forest,
-    FieldType.plain,
-    FieldType.grass
-  ],
-  FieldType.grass: [
-    FieldType.village,
-    FieldType.forest,
-    FieldType.plain,
-    FieldType.grass
-  ],
-  FieldType.river: [FieldType.river],
-  FieldType.train: [FieldType.train]
-};
 
 const defaultCounts = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1};
 
@@ -117,11 +80,11 @@ class HexEdge {
       {required this.type, this.count = 1, this.relations = const []});
 
   isValidConnection(FieldType otherType) {
-    return fieldTypeCompatibilites[type]?.contains(otherType) ?? false;
+    return type.isCompatible(otherType);
   }
 
   factory HexEdge.compatibleTo(FieldType other) {
-    var compatibles = fieldTypeCompatibilites[other]!;
+    var compatibles = other.getCompatibleTypes();
     var type = FieldType.plain;
     if (compatibles.length == 1) {
       type = compatibles.first;
@@ -139,5 +102,11 @@ class HexFieldGrid extends PointyHexGrid<HexField> {
     final type = incomingType[dir].type;
     final field = this[existing];
     return field?[Direction.invert(dir)].isValidConnection(type) ?? true;
+  }
+
+  void clear() {
+    grid.clear();
+    availablePlaces.clear();
+    availablePlaces.add(PointyHexagon.origin);
   }
 }

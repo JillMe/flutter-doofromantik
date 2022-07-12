@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hexagon/model/hex_field.dart';
 import 'package:hexagon/model/pointy_hexagon.dart';
 
+import 'triangle_piece.dart';
+
 typedef Dir = PointyHexagonalDirection;
 
 class HexagonWidget extends StatelessWidget {
@@ -52,63 +54,5 @@ class HexagonWidget extends StatelessWidget {
             type: field[dir].type,
           ),
         ));
-  }
-}
-
-class CustomTriangleClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.lineTo(size.width, 0);
-    path.lineTo(size.width / 2, size.height);
-    path.lineTo(0, 0);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
-
-class TriangularHexagonPieceWidget extends StatelessWidget {
-  final double width;
-  final double height;
-  final FieldType type;
-
-  const TriangularHexagonPieceWidget({
-    Key? key,
-    required this.width,
-    required this.height,
-    required this.type,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: CustomTriangleClipper(),
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(color: _color(type)),
-      ),
-    );
-  }
-
-  static Color? _color(FieldType type) {
-    switch (type) {
-      case FieldType.village:
-        return Colors.grey;
-      case FieldType.forest:
-        return Colors.green[900];
-      case FieldType.plain:
-        return Colors.yellow;
-      case FieldType.grass:
-        return Colors.green[200];
-      case FieldType.river:
-        return Colors.blue[700];
-      case FieldType.train:
-        return Colors.brown;
-    }
   }
 }

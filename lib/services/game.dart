@@ -1,17 +1,18 @@
 import 'package:hexagon/model/hex_field.dart';
 import 'package:hexagon/util/seed.dart';
 
+import '../model/field_type.dart';
 import '../model/pointy_hexagon.dart';
 
 class Game {
-  HexFieldGrid grid = HexFieldGrid();
+  HexFieldGrid board = HexFieldGrid();
   List<HexField> cards = [];
 
   Game();
 
   factory Game.startWithAllTypes() {
     Game game = Game();
-    game.grid[const PointyHexagon(q: 0, r: 0, s: 0)] = HexField.fromEdge([
+    game.board[const PointyHexagon(q: 0, r: 0, s: 0)] = HexField.fromEdge([
       const HexEdge(type: FieldType.grass),
       const HexEdge(type: FieldType.forest),
       const HexEdge(type: FieldType.village),
@@ -25,7 +26,7 @@ class Game {
   factory Game.example() {
     Game game = Game.startWithAllTypes();
 
-    while (game.grid.grid.length < 10) {
+    while (game.board.grid.length < 10) {
       game.addValidTile();
     }
 
@@ -35,19 +36,27 @@ class Game {
   factory Game.perfectExample() {
     Game game = Game.startWithAllTypes();
 
-    while (game.grid.grid.length < 10) {
+    while (game.board.grid.length < 10) {
       game.addValidTile(perfect: true);
     }
 
     return game;
   }
 
+  reset() {
+    final baseField = board[PointyHexagon.origin];
+    board.clear();
+    if (baseField != null) {
+      board[PointyHexagon.origin] = baseField;
+    }
+  }
+
   addValidTile({perfect = false}) {
     PointyHexagonalDirection.values;
-    final hex = pickRandom(grid.availablePlaces);
+    final hex = pickRandom(board.availablePlaces);
     var connections = <PointyHexagonalDirection, HexEdge>{};
     for (var dir in PointyHexagonalDirection.values) {
-      var neighbor = grid.getNeighbor(hex, dir);
+      var neighbor = board.getNeighbor(hex, dir);
       var edge = neighbor?[PointyHexagonalDirection.invert(dir)];
       if (neighbor != null && edge != null) {
         connections[dir] = HexEdge(type: edge.type);
@@ -55,6 +64,6 @@ class Game {
     }
 
     var field = HexField.generateFittingTile(connections, perfect);
-    grid[hex] = field;
+    board[hex] = field;
   }
 }

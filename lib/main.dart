@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hexagon/services/game.dart';
+import 'package:hexagon/widgets/board_widget.dart';
 import 'package:hexagon/widgets/hexagon_widget.dart';
 
 import 'model/hex_field.dart';
+import 'model/pointy_hexagon.dart';
 
 void main() => runApp(MyGame());
 
@@ -23,11 +25,13 @@ class _MyGameState extends State<MyGame> {
         appBar: AppBar(
           title: const Text("Doofromantik"),
           actions: [
-            IconButton(onPressed: _addPerfect, icon: const Icon(Icons.plus_one))
+            IconButton(onPressed: _resetBoard, icon: const Icon(Icons.replay)),
+            IconButton(onPressed: _addNormal, icon: const Icon(Icons.plus_one)),
+            IconButton(onPressed: _addPerfect, icon: const Icon(Icons.star)),
           ],
         ),
         body: MyStatelessWidget(
-          grid: widget.game.grid,
+          grid: widget.game.board,
         ),
       ),
     );
@@ -38,6 +42,18 @@ class _MyGameState extends State<MyGame> {
       widget.game.addValidTile(perfect: true);
     });
   }
+
+  void _addNormal() {
+    setState(() {
+      widget.game.addValidTile(perfect: false);
+    });
+  }
+
+  void _resetBoard() {
+    setState(() {
+      widget.game.reset();
+    });
+  }
 }
 
 const size = 50;
@@ -46,7 +62,7 @@ const offset = size * 5;
 
 class MyStatelessWidget extends StatelessWidget {
   final HexFieldGrid grid;
-  MyStatelessWidget({Key? key, required this.grid}) : super(key: key);
+  const MyStatelessWidget({Key? key, required this.grid}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,38 +71,11 @@ class MyStatelessWidget extends StatelessWidget {
         boundaryMargin: const EdgeInsets.all(20.0),
         minScale: 0.1,
         maxScale: 25,
-        child: Container(
-          width: size * 30,
-          height: size * 30,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[Colors.orange, Colors.red],
-              stops: <double>[0.0, 1.0],
-            ),
-          ),
-          child: Stack(
-            children: _buildGameTiles(),
-          ),
+        child: BoardWidget(
+          board: grid.grid,
+          size: 50 * 30,
         ),
       ),
     );
-  }
-
-  _buildGameTiles() {
-    List<Widget> widgets = [];
-    for (var key in grid.grid.keys) {
-      var field = grid[key];
-      if (field == null) {
-        continue;
-      }
-      final p = key.toPixel(size.toDouble());
-      widgets.add(Positioned(
-          left: offset + p.x.toDouble(),
-          top: offset + p.y.toDouble(),
-          child: HexagonWidget.fromSize(field: field, size: size.toDouble())));
-    }
-    return widgets;
   }
 }

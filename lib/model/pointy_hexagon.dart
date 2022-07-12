@@ -68,6 +68,8 @@ class PointyHexagon {
   const PointyHexagon.fromAxial({required int q, required int r})
       : this(q: q, r: r, s: -r - q);
 
+  static const origin = PointyHexagon.fromAxial(q: 0, r: 0);
+
   operator +(PointyHexagon b) {
     return PointyHexagon(q: q + b.q, r: r + b.r, s: s + b.s);
   }
