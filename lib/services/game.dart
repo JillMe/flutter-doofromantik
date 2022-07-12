@@ -50,10 +50,9 @@ class Game {
       var neighbor = grid.getNeighbor(hex, dir);
       var edge = neighbor?[PointyHexagonalDirection.invert(dir)];
       if (neighbor != null && edge != null) {
-        connections[dir] = HexEdge.compatibleTo(edge.type);
+        connections[dir] = HexEdge(type: edge.type);
       }
     }
-    ;
 
     var field = HexField.generateFittingTile(connections, perfect);
     grid[hex] = field;

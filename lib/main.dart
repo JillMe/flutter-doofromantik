@@ -35,7 +35,7 @@ class _MyGameState extends State<MyGame> {
 
   void _addPerfect() {
     setState(() {
-      widget.game.addValidTile();
+      widget.game.addValidTile(perfect: true);
     });
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:hexagon/model/pointy_hexagon.dart';
 import 'package:hexagon/util/seed.dart';
 
@@ -104,7 +102,7 @@ class HexField {
     var newEdges = Map<Direction, HexEdge>.from(edges);
     for (var entry in copyData.entries) {
       newEdges.remove(entry.key);
-      newEdges.putIfAbsent(entry.key, () => entry.value);
+      newEdges[entry.key] = entry.value;
     }
     return HexField._internal(edges: newEdges);
   }
