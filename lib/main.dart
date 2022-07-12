@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hexagon/model/hex_grid.dart';
 import 'package:hexagon/services/game.dart';
 import 'package:hexagon/widgets/board_widget.dart';
-import 'package:hexagon/widgets/hexagon_widget.dart';
 
 import 'model/hex_field.dart';
-import 'model/pointy_hexagon.dart';
 
 void main() => runApp(MyGame());
 
@@ -61,7 +60,7 @@ const size = 50;
 const offset = size * 5;
 
 class MyStatelessWidget extends StatelessWidget {
-  final HexFieldGrid grid;
+  final PointyHexGrid<HexField> grid;
   const MyStatelessWidget({Key? key, required this.grid}) : super(key: key);
 
   @override
@@ -72,7 +71,7 @@ class MyStatelessWidget extends StatelessWidget {
         minScale: 0.1,
         maxScale: 25,
         child: BoardWidget(
-          board: grid.grid,
+          board: grid,
           size: 50 * 30,
         ),
       ),

@@ -1,12 +1,19 @@
 import 'package:hexagon/model/hex_field.dart';
+import 'package:hexagon/model/hex_grid.dart';
 import 'package:hexagon/util/seed.dart';
 
 import '../model/field_type.dart';
 import '../model/pointy_hexagon.dart';
 
+bool compatibleWithNeighbor(
+    HexField existing, PointyHexagonalDirection dir, HexField incomingType) {
+  final type = incomingType[dir].type;
+  return existing[Direction.invert(dir)].isValidConnection(type) ?? true;
+}
+
 class Game {
-  HexFieldGrid board = HexFieldGrid();
-  List<HexField> cards = [];
+  final PointyHexGrid<HexField> board = PointyHexGrid(compatibleWithNeighbor);
+  final List<HexField> cards = [];
 
   Game();
 
@@ -26,7 +33,7 @@ class Game {
   factory Game.example() {
     Game game = Game.startWithAllTypes();
 
-    while (game.board.grid.length < 10) {
+    while (game.board.length < 10) {
       game.addValidTile();
     }
 
@@ -36,7 +43,7 @@ class Game {
   factory Game.perfectExample() {
     Game game = Game.startWithAllTypes();
 
-    while (game.board.grid.length < 10) {
+    while (game.board.length < 10) {
       game.addValidTile(perfect: true);
     }
 

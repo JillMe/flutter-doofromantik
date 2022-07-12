@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/hex_field.dart';
-import '../model/pointy_hexagon.dart';
+import '../model/hex_grid.dart';
 import 'hexagon_widget.dart';
 
 class BoardWidget extends StatelessWidget {
@@ -11,7 +11,7 @@ class BoardWidget extends StatelessWidget {
     required this.size,
   }) : super(key: key);
 
-  final Map<PointyHexagon, HexField> board;
+final PointyHexGrid<HexField> board;
   final double size;
 
   @override

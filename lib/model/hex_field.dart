@@ -95,18 +95,3 @@ class HexEdge {
   }
 }
 
-class HexFieldGrid extends PointyHexGrid<HexField> {
-  @override
-  bool compatibleWithNeighbor(PointyHexagon existing,
-      PointyHexagonalDirection dir, HexField incomingType) {
-    final type = incomingType[dir].type;
-    final field = this[existing];
-    return field?[Direction.invert(dir)].isValidConnection(type) ?? true;
-  }
-
-  void clear() {
-    grid.clear();
-    availablePlaces.clear();
-    availablePlaces.add(PointyHexagon.origin);
-  }
-}
