@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:hexagon/util/const.dart';
+
 enum PointyHexagonalDirection {
   right(PointyHexagon.fromAxial(q: 1, r: 0)),
   topRight(PointyHexagon.fromAxial(q: 1, r: -1)),
@@ -78,7 +80,7 @@ class PointyHexagon {
     return PointyHexagon(q: q - b.q, r: r - b.r, s: s - b.s);
   }
 
-  Point toPixel([double scale = 50.0]) {
+  Point toPixel([double scale = hexagonSize]) {
     double x = scale * (sqrt(3) * q + sqrt(3) / 2 * r);
     double y = scale * (3.0 / 2 * r);
     return Point(x, y);

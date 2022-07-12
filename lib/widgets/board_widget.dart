@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hexagon/model/pointy_hexagon.dart';
+import 'package:hexagon/util/const.dart';
 
 import '../model/hex_field.dart';
 import '../model/hex_grid.dart';
@@ -11,10 +13,12 @@ class BoardWidget extends StatelessWidget {
     Key? key,
     required this.board,
     required this.bounds,
+    required this.onTapAvailable,
   }) : super(key: key);
 
   final PointyHexGrid<HexField> board;
   final Rectangle bounds;
+  final Function(PointyHexagon point) onTapAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -30,18 +34,30 @@ class BoardWidget extends StatelessWidget {
         ),
       ),
       child: Stack(
-        children: board.entries.map((e) {
-          final p = e.key.toPixel(50);
-          return Positioned(
-            left: p.x - bounds.left.toDouble() - 50,
-            top: p.y - bounds.top.toDouble() - 50,
-            child: HexagonWidget.fromSize(
-              field: e.value,
-              size: 50,
-            ),
-          );
-        }).toList(),
+        children: buildTiles().toList(),
       ),
     );
   }
+
+  Iterable<Widget> buildTiles() {
+    List<Widget> tiles = board.entries
+        .map((e) => _buildPositioned(
+              e.key.toPixel(),
+              HexagonWidget.fromSize(field: e.value, size: hexagonSize),
+            ))
+        .toList();
+    tiles.addAll(board.availablePlaces.map((e) => _buildPositioned(
+        e.toPixel(),
+        HexagonWidget.fromSize(
+          size: hexagonSize,
+          onTap: () => onTapAvailable(e),
+        ))));
+    return tiles;
+  }
+
+  Widget _buildPositioned(Point p, Widget child) => Positioned(
+        left: p.x - bounds.left.toDouble() - 50,
+        top: p.y - bounds.top.toDouble() - 50,
+        child: child,
+      );
 }

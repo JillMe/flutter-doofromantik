@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hexagon/model/hex_grid.dart';
+import 'package:hexagon/model/pointy_hexagon.dart';
 import 'package:hexagon/services/game.dart';
 import 'package:hexagon/widgets/board_widget.dart';
 
@@ -34,9 +35,16 @@ class _MyGameState extends State<MyGame> {
         body: MyStatelessWidget(
           grid: widget.game.board,
           bounds: widget.game.boundingRect(),
+          onTapAvailable: _addTile,
         ),
       ),
     );
+  }
+
+  void _addTile(PointyHexagon hex) {
+    setState(() {
+      widget.game.addValidTile(target: hex, perfect: true);
+    });
   }
 
   void _addPerfect() {
@@ -58,14 +66,15 @@ class _MyGameState extends State<MyGame> {
   }
 }
 
-const size = 50;
-
-const offset = size * 5;
-
 class MyStatelessWidget extends StatelessWidget {
   final PointyHexGrid<HexField> grid;
   final Rectangle bounds;
-  const MyStatelessWidget({Key? key, required this.grid, required this.bounds})
+  final Function(PointyHexagon point) onTapAvailable;
+  const MyStatelessWidget(
+      {Key? key,
+      required this.grid,
+      required this.bounds,
+      required this.onTapAvailable})
       : super(key: key);
 
   @override
@@ -78,6 +87,7 @@ class MyStatelessWidget extends StatelessWidget {
       child: BoardWidget(
         board: grid,
         bounds: bounds,
+        onTapAvailable: onTapAvailable,
       ),
     );
   }

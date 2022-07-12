@@ -6,6 +6,7 @@ import 'package:hexagon/util/seed.dart';
 
 import '../model/field_type.dart';
 import '../model/pointy_hexagon.dart';
+import '../util/const.dart';
 
 bool compatibleWithNeighbor(
     HexField existing, PointyHexagonalDirection dir, HexField incomingType) {
@@ -60,9 +61,9 @@ class Game {
     }
   }
 
-  addValidTile({perfect = false}) {
+  addValidTile({perfect = false, PointyHexagon? target}) {
     PointyHexagonalDirection.values;
-    final hex = pickRandom(board.availablePlaces);
+    final PointyHexagon hex = target ?? pickRandom(board.availablePlaces);
     var connections = <PointyHexagonalDirection, HexEdge>{};
     for (var dir in PointyHexagonalDirection.values) {
       var neighbor = board.getNeighbor(hex, dir);
@@ -76,9 +77,10 @@ class Game {
     board[hex] = field;
   }
 
-  Rectangle boundingRect([size = 50.0]) {
+  Rectangle boundingRect([size = hexagonSize]) {
     var bounds = board.bounds;
-    return Rectangle(bounds.left * size - size, bounds.top * size - size,
-        bounds.width * size + 2 * size, bounds.height * size + 2 * size);
+    var padding = 3 * size;
+    return Rectangle(bounds.left * size - padding, bounds.top * size - padding,
+        bounds.width * size + 2 * padding, bounds.height * size + 2 * padding);
   }
 }
