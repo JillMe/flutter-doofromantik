@@ -44,15 +44,23 @@ class HexagonWidget extends StatelessWidget {
   Widget _textForDir(Dir dir) {
     return Positioned(
       top: Dir.isTop(dir)
-          ? height / 4
+          ? height / 6
           : Dir.isCenter(dir)
               ? height / 2
               : null,
-      bottom: Dir.isBottom(dir) ? height / 4 : null,
-      right: Dir.isRight(dir) ? 0 : null,
-      left: Dir.isLeft(dir) ? 0 : null,
+      bottom: Dir.isBottom(dir) ? height / 6 : null,
+      right: Dir.isRight(dir)
+          ? Dir.isCenter(dir)
+              ? 0
+              : width / 6
+          : null,
+      left: Dir.isLeft(dir)
+          ? Dir.isCenter(dir)
+              ? 0
+              : width / 6
+          : null,
       child: Transform.rotate(
-          angle: pi / 2 - pi / 3 * dir.index,
+          angle: pi / 2 - pi / 3.0 * dir.index.toDouble(),
           child: Text(field[dir].type.name)),
     );
   }

@@ -6,7 +6,9 @@ abstract class PointyHexGrid<T> {
   Map<PointyHexagon, T> grid = HashMap<PointyHexagon, T>();
   Set<PointyHexagon> availablePlaces = HashSet();
 
-  PointyHexGrid();
+  PointyHexGrid() {
+    availablePlaces.add(const PointyHexagon.fromAxial(q: 0, r: 0));
+  }
 
   getNeighbor(PointyHexagon hex, PointyHexagonalDirection dir) {
     return this[hex + dir.hex];
@@ -17,8 +19,8 @@ abstract class PointyHexGrid<T> {
   }
 
   void operator []=(PointyHexagon hex, T value) {
-    assert(availablePlaces.contains(hex),
-        "Can't put on an already occupied field");
+    assert(availablePlaces.contains(hex), "Can't put on an unavailable field");
+    assert(!grid.containsKey(hex), "Can't put on occupied field");
     var newPlaces = <PointyHexagon>[];
     for (PointyHexagonalDirection dir in PointyHexagonalDirection.values) {
       final next = hex + dir.hex;

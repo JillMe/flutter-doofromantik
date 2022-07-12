@@ -45,9 +45,16 @@ class MyStatelessWidget extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               HexagonWidget.fromSize(
-                  field:
-                      HexField.fromEdge([const HexEdge(type: FieldType.grass)]),
-                      size: 100,)
+                field: HexField.fromEdge([
+                  const HexEdge(type: FieldType.grass),
+                  const HexEdge(type: FieldType.forest),
+                  const HexEdge(type: FieldType.village),
+                  const HexEdge(type: FieldType.plain),
+                  const HexEdge(type: FieldType.train),
+                  const HexEdge(type: FieldType.river)
+                ]),
+                size: 100,
+              )
             ],
           ),
         ),
