@@ -53,7 +53,7 @@ class MyStatelessWidget extends StatelessWidget {
                   const HexEdge(type: FieldType.train),
                   const HexEdge(type: FieldType.river)
                 ]),
-                size: 100,
+                size: 150,
               )
             ],
           ),
