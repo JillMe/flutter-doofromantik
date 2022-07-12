@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:hexagon/model/pointy_hexagon.dart';
+import 'package:hexagon/util/seed.dart';
 
 import 'hex_grid.dart';
 
@@ -79,6 +82,28 @@ class HexField {
     return HexField.fromEdges(
         edges[0], edges[1], edges[2], edges[3], edges[4], edges[5]);
   }
+
+  factory HexField.generateRandom() {
+    final edges = List.generate(
+        6, (index) => HexEdge(type: FieldType.values.elementAt(r.nextInt(6))));
+    return HexField.fromEdge(edges);
+  }
+
+  factory HexField.generateFittingTile(Map<Direction, HexEdge> connections) {
+    var field = HexField.generateRandom();
+    final edges = connections
+        .map((key, value) => MapEntry(key, HexEdge.compatibleTo(value.type)));
+    return field.copyWith(edges);
+  }
+
+  HexField copyWith(Map<Direction, HexEdge> copyData) {
+    var newEdges = Map<Direction, HexEdge>.from(edges);
+    for (var entry in copyData.entries) {
+      newEdges.remove(entry.key);
+      newEdges.putIfAbsent(entry.key, () => entry.value);
+    }
+    return HexField._internal(edges: newEdges);
+  }
 }
 
 class HexEdge {
@@ -91,6 +116,17 @@ class HexEdge {
 
   isValidConnection(FieldType otherType) {
     return fieldTypeCompatibilites[type]?.contains(otherType) ?? false;
+  }
+
+  factory HexEdge.compatibleTo(FieldType other) {
+    var compatibles = fieldTypeCompatibilites[other]!;
+    var type = FieldType.plain;
+    if (compatibles.length == 1) {
+      type = compatibles.first;
+    } else {
+      type = pickRandom(compatibles);
+    }
+    return HexEdge(type: type);
   }
 }
 

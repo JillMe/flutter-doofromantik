@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hexagon/model/hex_field.dart';
-import 'package:hexagon/model/pointy_hexagon.dart';
 import 'package:hexagon/services/game.dart';
 import 'package:hexagon/widgets/hexagon_widget.dart';
 
@@ -23,9 +21,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-const size = 100.0;
+const size = 50;
 
-const offset = 0;
+const offset = size * 5;
 
 class MyStatelessWidget extends StatelessWidget {
   final Game game = Game.example();
@@ -39,8 +37,8 @@ class MyStatelessWidget extends StatelessWidget {
         minScale: 0.1,
         maxScale: 25,
         child: Container(
-          width: 1000,
-          height: 1000,
+          width: size * 30,
+          height: size * 30,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -64,11 +62,11 @@ class MyStatelessWidget extends StatelessWidget {
       if (field == null) {
         continue;
       }
-      final p = key.toPixel(size);
+      final p = key.toPixel(size.toDouble());
       widgets.add(Positioned(
           left: offset + p.x.toDouble(),
           top: offset + p.y.toDouble(),
-          child: HexagonWidget.fromSize(field: field, size: size)));
+          child: HexagonWidget.fromSize(field: field, size: size.toDouble())));
     }
     return widgets;
   }

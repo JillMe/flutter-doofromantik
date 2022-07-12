@@ -91,10 +91,6 @@ class TriangularHexagonPieceWidget extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(color: _color(type)),
-        child: Text(
-          type.name,
-          textAlign: TextAlign.center,
-        ),
       ),
     );
   }
@@ -106,7 +102,7 @@ class TriangularHexagonPieceWidget extends StatelessWidget {
       case FieldType.forest:
         return Colors.green[900];
       case FieldType.plain:
-        return Colors.deepOrange;
+        return Colors.yellow;
       case FieldType.grass:
         return Colors.green[200];
       case FieldType.river:

@@ -10,7 +10,7 @@ abstract class PointyHexGrid<T> {
     availablePlaces.add(const PointyHexagon.fromAxial(q: 0, r: 0));
   }
 
-  getNeighbor(PointyHexagon hex, PointyHexagonalDirection dir) {
+  T? getNeighbor(PointyHexagon hex, PointyHexagonalDirection dir) {
     return this[hex + dir.hex];
   }
 

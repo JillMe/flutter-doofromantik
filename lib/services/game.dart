@@ -1,4 +1,5 @@
 import 'package:hexagon/model/hex_field.dart';
+import 'package:hexagon/util/seed.dart';
 
 import '../model/pointy_hexagon.dart';
 
@@ -18,18 +19,28 @@ class Game {
       const HexEdge(type: FieldType.train),
       const HexEdge(type: FieldType.river)
     ]);
-    game.grid[const PointyHexagon.fromAxial(q: 1, r: 0)] = HexField.fromEdge([
-      const HexEdge(type: FieldType.grass),
-    ]);
-    game.grid[const PointyHexagon.fromAxial(q: 2, r: 0)] = HexField.fromEdge([
-      const HexEdge(type: FieldType.grass),
-    ]);
-    game.grid[const PointyHexagon.fromAxial(q: 0, r: 1)] = HexField.fromEdge([
-      const HexEdge(type: FieldType.grass),
-      const HexEdge(type: FieldType.grass),
-      const HexEdge(type: FieldType.river),
-      const HexEdge(type: FieldType.grass),
-    ]);
+
+    while (game.grid.grid.length < 10) {
+      game._addValidTile();
+    }
+
     return game;
+  }
+
+  _addValidTile() {
+    PointyHexagonalDirection.values;
+    final hex = pickRandom(grid.availablePlaces);
+    var connections = <PointyHexagonalDirection, HexEdge>{};
+    for (var dir in PointyHexagonalDirection.values) {
+      var neighbor = grid.getNeighbor(hex, dir);
+      var edge = neighbor?[PointyHexagonalDirection.invert(dir)];
+      if (neighbor != null && edge != null) {
+        connections[dir] = HexEdge.compatibleTo(edge.type);
+      }
+    }
+    ;
+
+    var field = HexField.generateFittingTile(connections);
+    grid[hex] = field;
   }
 }
