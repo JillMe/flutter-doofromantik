@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexagon/model/hex_field.dart';
+import 'package:hexagon/model/pointy_hexagon.dart';
+import 'package:hexagon/services/game.dart';
 import 'package:hexagon/widgets/hexagon_widget.dart';
 
 void main() => runApp(const MyApp());
@@ -15,14 +17,19 @@ class MyApp extends StatelessWidget {
       title: _title,
       home: Scaffold(
         appBar: AppBar(title: const Text(_title)),
-        body: const MyStatelessWidget(),
+        body: MyStatelessWidget(),
       ),
     );
   }
 }
 
+const size = 100.0;
+
+const offset = 0;
+
 class MyStatelessWidget extends StatelessWidget {
-  const MyStatelessWidget({Key? key}) : super(key: key);
+  final Game game = Game.example();
+  MyStatelessWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +39,8 @@ class MyStatelessWidget extends StatelessWidget {
         minScale: 0.1,
         maxScale: 25,
         child: Container(
-          width: 500,
-          height: 500,
+          width: 1000,
+          height: 1000,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -43,22 +50,26 @@ class MyStatelessWidget extends StatelessWidget {
             ),
           ),
           child: Stack(
-            children: <Widget>[
-              HexagonWidget.fromSize(
-                field: HexField.fromEdge([
-                  const HexEdge(type: FieldType.grass),
-                  const HexEdge(type: FieldType.forest),
-                  const HexEdge(type: FieldType.village),
-                  const HexEdge(type: FieldType.plain),
-                  const HexEdge(type: FieldType.train),
-                  const HexEdge(type: FieldType.river)
-                ]),
-                size: 150,
-              )
-            ],
+            children: _buildGameTiles(),
           ),
         ),
       ),
     );
+  }
+
+  _buildGameTiles() {
+    List<Widget> widgets = [];
+    for (var key in game.grid.grid.keys) {
+      var field = game.grid[key];
+      if (field == null) {
+        continue;
+      }
+      final p = key.toPixel(size);
+      widgets.add(Positioned(
+          left: offset + p.x.toDouble(),
+          top: offset + p.y.toDouble(),
+          child: HexagonWidget.fromSize(field: field, size: size)));
+    }
+    return widgets;
   }
 }
