@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:hexagon/model/hex_field.dart';
 import 'package:hexagon/model/hex_grid.dart';
+import 'package:hexagon/services/tile_factory.dart';
 import 'package:hexagon/util/seed.dart';
 
 import '../model/field_type.dart';
@@ -73,7 +74,7 @@ class Game {
       }
     }
 
-    var field = HexField.generateFittingTile(connections, perfect);
+    var field = generateFittingTile(connections, perfect);
     board[hex] = field;
   }
 

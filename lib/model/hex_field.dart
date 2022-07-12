@@ -43,23 +43,6 @@ class HexField {
         edges[0], edges[1], edges[2], edges[3], edges[4], edges[5]);
   }
 
-  factory HexField.generateRandom() {
-    final edges = List.generate(
-        6, (index) => HexEdge(type: FieldType.values.elementAt(r.nextInt(6))));
-    return HexField.fromEdge(edges);
-  }
-
-  factory HexField.generateFittingTile(Map<Direction, HexEdge> connections,
-      [perfect = false]) {
-    var field = HexField.generateRandom();
-    final edges = connections.map((key, value) => MapEntry(
-        key,
-        perfect
-            ? HexEdge(type: value.type)
-            : HexEdge.compatibleTo(value.type)));
-    return field.copyWith(edges);
-  }
-
   HexField copyWith(Map<Direction, HexEdge> copyData) {
     var newEdges = Map<Direction, HexEdge>.from(edges);
     for (var entry in copyData.entries) {
