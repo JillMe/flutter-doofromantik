@@ -69,11 +69,12 @@ class HexField {
   }
 
   factory HexField.fromEdge(List<HexEdge> inc) {
-    var edges = inc;
+    var edges = inc.take(6).toList();
     if (edges.length < 6) {
       var filler =
           edges.isEmpty ? const HexEdge(type: FieldType.plain) : edges.first;
-      edges.fillRange(edges.length, 6 - edges.length, filler);
+      edges =
+          List.generate(6, (index) => index < inc.length ? inc[index] : filler);
     }
     return HexField.fromEdges(
         edges[0], edges[1], edges[2], edges[3], edges[4], edges[5]);

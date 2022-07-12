@@ -1,3 +1,5 @@
+import 'dart:math';
+
 enum PointyHexagonalDirection {
   right(PointyHexagon.fromAxial(q: 1, r: 0)),
   topRight(PointyHexagon.fromAxial(q: 1, r: -1)),
@@ -27,6 +29,33 @@ enum PointyHexagonalDirection {
         return PointyHexagonalDirection.topLeft;
     }
   }
+
+  static bool isRight(PointyHexagonalDirection dir) {
+    return dir == PointyHexagonalDirection.bottomRight ||
+        dir == PointyHexagonalDirection.right ||
+        dir == PointyHexagonalDirection.topRight;
+  }
+
+  static bool isLeft(PointyHexagonalDirection dir) {
+    return dir == PointyHexagonalDirection.bottomLeft ||
+        dir == PointyHexagonalDirection.left ||
+        dir == PointyHexagonalDirection.topLeft;
+  }
+
+  static bool isTop(PointyHexagonalDirection dir) {
+    return dir == PointyHexagonalDirection.topRight ||
+        dir == PointyHexagonalDirection.topLeft;
+  }
+
+  static bool isBottom(PointyHexagonalDirection dir) {
+    return dir == PointyHexagonalDirection.bottomRight ||
+        dir == PointyHexagonalDirection.bottomLeft;
+  }
+
+  static bool isCenter(PointyHexagonalDirection dir) {
+    return dir == PointyHexagonalDirection.right ||
+        dir == PointyHexagonalDirection.left;
+  }
 }
 
 class PointyHexagon {
@@ -45,6 +74,12 @@ class PointyHexagon {
 
   operator -(PointyHexagon b) {
     return PointyHexagon(q: q - b.q, r: r - b.r, s: s - b.s);
+  }
+
+  Point toPixel([double scale = 20]) {
+    double x = scale * (sqrt(3) * q + sqrt(3) / 2 * r);
+    double y = scale * (3.0 / 2 * r);
+    return Point(x, y);
   }
 
   @override
