@@ -89,10 +89,14 @@ class HexField {
     return HexField.fromEdge(edges);
   }
 
-  factory HexField.generateFittingTile(Map<Direction, HexEdge> connections) {
+  factory HexField.generateFittingTile(Map<Direction, HexEdge> connections,
+      [perfect = false]) {
     var field = HexField.generateRandom();
-    final edges = connections
-        .map((key, value) => MapEntry(key, HexEdge.compatibleTo(value.type)));
+    final edges = connections.map((key, value) => MapEntry(
+        key,
+        perfect
+            ? HexEdge(type: value.type)
+            : HexEdge.compatibleTo(value.type)));
     return field.copyWith(edges);
   }
 

@@ -9,7 +9,7 @@ class Game {
 
   Game();
 
-  factory Game.example() {
+  factory Game.startWithAllTypes() {
     Game game = Game();
     game.grid[const PointyHexagon(q: 0, r: 0, s: 0)] = HexField.fromEdge([
       const HexEdge(type: FieldType.grass),
@@ -19,15 +19,30 @@ class Game {
       const HexEdge(type: FieldType.train),
       const HexEdge(type: FieldType.river)
     ]);
+    return game;
+  }
+
+  factory Game.example() {
+    Game game = Game.startWithAllTypes();
 
     while (game.grid.grid.length < 10) {
-      game._addValidTile();
+      game.addValidTile();
     }
 
     return game;
   }
 
-  _addValidTile() {
+  factory Game.perfectExample() {
+    Game game = Game.startWithAllTypes();
+
+    while (game.grid.grid.length < 10) {
+      game.addValidTile(perfect: true);
+    }
+
+    return game;
+  }
+
+  addValidTile({perfect = false}) {
     PointyHexagonalDirection.values;
     final hex = pickRandom(grid.availablePlaces);
     var connections = <PointyHexagonalDirection, HexEdge>{};
@@ -40,7 +55,7 @@ class Game {
     }
     ;
 
-    var field = HexField.generateFittingTile(connections);
+    var field = HexField.generateFittingTile(connections, perfect);
     grid[hex] = field;
   }
 }

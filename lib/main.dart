@@ -2,22 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:hexagon/services/game.dart';
 import 'package:hexagon/widgets/hexagon_widget.dart';
 
-void main() => runApp(const MyApp());
+import 'model/hex_field.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+void main() => runApp(MyGame());
 
-  static const String _title = 'Flutter Code Sample';
+class MyGame extends StatefulWidget {
+  final Game game = Game.startWithAllTypes();
+  MyGame({Key? key}) : super(key: key);
 
+  @override
+  State<MyGame> createState() => _MyGameState();
+}
+
+class _MyGameState extends State<MyGame> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: _title,
+      title: "Doofromantik",
       home: Scaffold(
-        appBar: AppBar(title: const Text(_title)),
-        body: MyStatelessWidget(),
+        appBar: AppBar(
+          title: const Text("Doofromantik"),
+          actions: [
+            IconButton(onPressed: _addPerfect, icon: const Icon(Icons.plus_one))
+          ],
+        ),
+        body: MyStatelessWidget(
+          grid: widget.game.grid,
+        ),
       ),
     );
+  }
+
+  void _addPerfect() {
+    setState(() {
+      widget.game.addValidTile();
+    });
   }
 }
 
@@ -26,8 +45,8 @@ const size = 50;
 const offset = size * 5;
 
 class MyStatelessWidget extends StatelessWidget {
-  final Game game = Game.example();
-  MyStatelessWidget({Key? key}) : super(key: key);
+  final HexFieldGrid grid;
+  MyStatelessWidget({Key? key, required this.grid}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +76,8 @@ class MyStatelessWidget extends StatelessWidget {
 
   _buildGameTiles() {
     List<Widget> widgets = [];
-    for (var key in game.grid.grid.keys) {
-      var field = game.grid[key];
+    for (var key in grid.grid.keys) {
+      var field = grid[key];
       if (field == null) {
         continue;
       }
