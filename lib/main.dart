@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hexagon/model/hex_grid.dart';
 import 'package:hexagon/services/game.dart';
@@ -31,6 +33,7 @@ class _MyGameState extends State<MyGame> {
         ),
         body: MyStatelessWidget(
           grid: widget.game.board,
+          bounds: widget.game.boundingRect(),
         ),
       ),
     );
@@ -61,19 +64,20 @@ const offset = size * 5;
 
 class MyStatelessWidget extends StatelessWidget {
   final PointyHexGrid<HexField> grid;
-  const MyStatelessWidget({Key? key, required this.grid}) : super(key: key);
+  final Rectangle bounds;
+  const MyStatelessWidget({Key? key, required this.grid, required this.bounds})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: InteractiveViewer(
-        boundaryMargin: const EdgeInsets.all(20.0),
-        minScale: 0.1,
-        maxScale: 25,
-        child: BoardWidget(
-          board: grid,
-          size: 50 * 30,
-        ),
+    return InteractiveViewer(
+      boundaryMargin: const EdgeInsets.all(20.0),
+      constrained: false,
+      minScale: 0.1,
+      maxScale: 25,
+      child: BoardWidget(
+        board: grid,
+        bounds: bounds,
       ),
     );
   }

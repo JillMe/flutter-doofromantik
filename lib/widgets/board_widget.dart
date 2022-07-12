@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../model/hex_field.dart';
@@ -8,17 +10,17 @@ class BoardWidget extends StatelessWidget {
   const BoardWidget({
     Key? key,
     required this.board,
-    required this.size,
+    required this.bounds,
   }) : super(key: key);
 
-final PointyHexGrid<HexField> board;
-  final double size;
+  final PointyHexGrid<HexField> board;
+  final Rectangle bounds;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size,
-      height: size,
+      width: bounds.width.toDouble(),
+      height: bounds.height.toDouble(),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -31,8 +33,8 @@ final PointyHexGrid<HexField> board;
         children: board.entries.map((e) {
           final p = e.key.toPixel(50);
           return Positioned(
-            left: 300.0 + p.x,
-            top: 200.0 + p.y,
+            left: p.x - bounds.left.toDouble() - 50,
+            top: p.y - bounds.top.toDouble() - 50,
             child: HexagonWidget.fromSize(
               field: e.value,
               size: 50,

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:hexagon/model/hex_field.dart';
 import 'package:hexagon/model/hex_grid.dart';
 import 'package:hexagon/util/seed.dart';
@@ -72,5 +74,11 @@ class Game {
 
     var field = HexField.generateFittingTile(connections, perfect);
     board[hex] = field;
+  }
+
+  Rectangle boundingRect([size = 50.0]) {
+    var bounds = board.bounds;
+    return Rectangle(bounds.left * size - size, bounds.top * size - size,
+        bounds.width * size + 2 * size, bounds.height * size + 2 * size);
   }
 }

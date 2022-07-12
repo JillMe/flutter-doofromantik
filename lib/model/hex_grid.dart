@@ -1,12 +1,16 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:hexagon/model/pointy_hexagon.dart';
 
 class PointyHexGrid<T> {
   final Map<PointyHexagon, T> _grid = HashMap<PointyHexagon, T>();
   final Set<PointyHexagon> _availablePlaces = HashSet();
-  bool Function(T existing, PointyHexagonalDirection dir, T incomingType)
+  final bool Function(T existing, PointyHexagonalDirection dir, T incomingType)
       isCompatible;
+
+  Point _topLeft = const Point(0, 0);
+  Point _bottomRight = const Point(0, 0);
 
   PointyHexGrid(this.isCompatible) {
     _availablePlaces.add(const PointyHexagon.fromAxial(q: 0, r: 0));
@@ -20,6 +24,8 @@ class PointyHexGrid<T> {
     return _grid[hex];
   }
 
+  Rectangle get bounds => Rectangle.fromPoints(_topLeft, _bottomRight);
+
   Iterable<PointyHexagon> get availablePlaces => _availablePlaces;
 
   get length => _grid.length;
@@ -27,6 +33,8 @@ class PointyHexGrid<T> {
   void clear() {
     _grid.clear();
     _availablePlaces.clear();
+    _topLeft = const Point(0, 0);
+    _bottomRight = const Point(0, 0);
     _availablePlaces.add(PointyHexagon.origin);
   }
 
@@ -48,5 +56,9 @@ class PointyHexGrid<T> {
     _grid[hex] = value;
     _availablePlaces.remove(hex);
     _availablePlaces.addAll(newPlaces);
+    var newPoint = hex.toPixel(1);
+    _bottomRight =
+        Point(max(_bottomRight.x, newPoint.x), max(_bottomRight.y, newPoint.y));
+    _topLeft = Point(min(_topLeft.x, newPoint.x), min(_topLeft.y, newPoint.y));
   }
 }

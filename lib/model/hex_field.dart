@@ -2,7 +2,6 @@ import 'package:hexagon/model/pointy_hexagon.dart';
 import 'package:hexagon/util/seed.dart';
 
 import 'field_type.dart';
-import 'hex_grid.dart';
 
 typedef Direction = PointyHexagonalDirection;
 
@@ -94,4 +93,3 @@ class HexEdge {
     return HexEdge(type: type);
   }
 }
-

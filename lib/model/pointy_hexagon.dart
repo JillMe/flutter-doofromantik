@@ -78,7 +78,7 @@ class PointyHexagon {
     return PointyHexagon(q: q - b.q, r: r - b.r, s: s - b.s);
   }
 
-  Point toPixel([double scale = 20]) {
+  Point toPixel([double scale = 50.0]) {
     double x = scale * (sqrt(3) * q + sqrt(3) / 2 * r);
     double y = scale * (3.0 / 2 * r);
     return Point(x, y);
